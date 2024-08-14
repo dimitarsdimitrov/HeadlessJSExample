@@ -32,12 +32,25 @@ class MainApplication : Application(), ReactApplication {
   override val reactHost: ReactHost
     get() = getDefaultReactHost(applicationContext, reactNativeHost)
 
-  override fun onCreate() {
-    super.onCreate()
+   override fun onCreate() {
     SoLoader.init(this, false)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       load()
     }
-  }
+
+       /*
+      val intent = Intent(applicationContext, MyHeadlessJsTaskService::class.java)
+      applicationContext.startService(intent)
+      HeadlessJsTaskService.acquireWakeLockNow(applicationContext)*/
+   }
+
+    /*
+    override fun getPackages(): List<ReactPackage> {
+        return listOf(
+            MainReactPackage(),
+            HeadlessJsTaskServicePackage() // Ensure this line is present
+        )
+    }*/
+
 }
