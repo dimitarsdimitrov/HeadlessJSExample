@@ -10,11 +10,16 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
+import com.facebook.react.shell.MainReactPackage
+import com.facebook.react.HeadlessJsTaskService
+import android.content.Intent
+import java.util.Arrays
 
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {
+          /*
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
@@ -22,35 +27,42 @@ class MainApplication : Application(), ReactApplication {
             }
 
         override fun getJSMainModuleName(): String = "index"
-
+*/
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
         override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
         override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+
+          override fun getPackages(): List<ReactPackage> {
+              return listOf(
+                  MainReactPackage(),
+                  HeadlessJsTaskServicePackage() // Register your package here
+              )
+          }
+
+          override fun getJSMainModuleName(): String {
+              return "index"
+          }
+
+
       }
+
+
 
   override val reactHost: ReactHost
     get() = getDefaultReactHost(applicationContext, reactNativeHost)
 
+
    override fun onCreate() {
-    SoLoader.init(this, false)
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
-      load()
-    }
 
-       /*
-      val intent = Intent(applicationContext, MyHeadlessJsTaskService::class.java)
-      applicationContext.startService(intent)
-      HeadlessJsTaskService.acquireWakeLockNow(applicationContext)*/
+       super.onCreate()
+       SoLoader.init(this, /* native exopackage */ false)
+/*
+       // Initialize and start the HeadlessJsTaskService
+       val intent = Intent(applicationContext, MyHeadlessJsTaskService::class.java)
+       applicationContext.startService(intent)
+
+       // Ensure we are acquiring the wake lock correctly
+       HeadlessJsTaskService.acquireWakeLockNow(applicationContext)*/
    }
-
-    /*
-    override fun getPackages(): List<ReactPackage> {
-        return listOf(
-            MainReactPackage(),
-            HeadlessJsTaskServicePackage() // Ensure this line is present
-        )
-    }*/
-
 }

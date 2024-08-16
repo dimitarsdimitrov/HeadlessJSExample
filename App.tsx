@@ -1,10 +1,17 @@
 // App.js
 import React from 'react';
 import { View, Button, NativeModules, StyleSheet } from 'react-native';
+const { HeadlessJsTaskServiceModule } = NativeModules;
 
 const App = () => {
   const triggerBackgroundTask = () => {
-    NativeModules.HeadlessJsTaskServiceModule.startService();
+    console.log('   NativeModules.HeadlessJsTaskServiceModule: ', HeadlessJsTaskServiceModule);
+    // Make sure method name matches the native module
+    if (HeadlessJsTaskServiceModule && typeof HeadlessJsTaskServiceModule.startService === 'function') {
+      HeadlessJsTaskServiceModule.startService();
+    } else {
+      console.error('startBackgroundTask method not found in HeadlessJsTaskServiceModule');
+    }
   };
 
   return (
@@ -21,5 +28,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
 
 export default App;

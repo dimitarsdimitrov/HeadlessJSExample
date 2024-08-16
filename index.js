@@ -3,6 +3,7 @@
  */
 
 import {AppRegistry} from 'react-native';
+import './BackgroundTask'; // Ensure this file is imported
 import App from './App';
 import {name as appName} from './app.json';
 
